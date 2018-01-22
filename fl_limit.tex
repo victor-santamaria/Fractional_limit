@@ -7,18 +7,21 @@
 \usepackage{etoolbox}
 \usepackage{color}
 \usepackage[english]{babel}
-\usepackage{pgfplotstable}
-\usepackage{tikz}
 \usepackage{hyperref}
 \usepackage{microtype}
 
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{subfig}
+\usetikzlibrary{matrix,external,fit}
 
 \hfuzz=4pt
 \usepackage[dvips,bottom=1.4in,right=1in,top=1in, left=1in]{geometry}
 
 \DisableLigatures{encoding = *, family = * }
 
-%\usepackage[notref,notcite]{showkeys}
+\usepackage[notref,notcite]{showkeys}
 
 \DeclareMathOperator*{\esssup}{ess\,sup}
 \DeclareMathOperator*{\essinf}{ess\,inf}
@@ -101,7 +104,7 @@
 \address{\textsuperscript{1,2}\,DeustoTech, University of Deusto, 48007 Bilbao, Basque Country, Spain.}
 \address{\textsuperscript{1,2}\,Facultad de Ingenier\'ia, Universidad de Deusto, Avenida de las Universidades 24, 48007 Bilbao, Basque Country, Spain, +34 944139003 - 3282.}
 \email{umberto.biccari@deusto.es, u.biccari@gmail.com, victor.santamaria@deusto.es}
-\thanks{The work of Umberto Biccari was partially supported by the Advanced Grant DYCON (Dynamic Control) of the European Research Council Executive Agency, by the MTM2014-52347 Grant of the MINECO (Spain) and by the Air Force Office of Scientific Research under the Award No: FA9550-15-1-0027.} 
+\thanks{The work of Umberto Biccari was partially supported by the Advanced Grant DYCON (Dynamic Control) of the European Research Council Executive Agency and by the MTM2014-52347 Grant of the MINECO (Spain).} 
 
 \author{V\'ictor Hern\'andez-Santamar\'ia\textsuperscript{2}}
 \thanks{The work of V\'ictor Hern\'andez-Santamar\'ia was partially supported by the
@@ -117,7 +120,7 @@
 
 \begin{abstract}
 We analyze the limit behavior as $s\to 1^-$ of the solution to the fractional Poisson equation $\fl{s}{u_s}=f_s$, $x\in\Omega$ with homogeneous Dirichlet boundary conditions $u_s\equiv 0$, $x\in\Omega^c$. 
-We show that $\lim_{s\to 1^-} u_s =u$, with $-\Delta u =f$, $x\in\Omega$ and $u=0$, $x\in\partial\Omega$. As a consequence, we obtain that also the solution to the parabolic problem $\partial_t\phi_s + \fl{s}{\phi_s} = f_s$ converges to the corresponding solution to the classical heat equation.
+We show that $\lim_{s\to 1^-} u_s =u$, with $-\Delta u =f$, $x\in\Omega$ and $u=0$, $x\in\partial\Omega$. Our results are complemented by a discussion on the rate of convergence and on extensions to the parabolic setting.
 \end{abstract}
 
 \maketitle
@@ -133,7 +136,7 @@ Let $0<s<1$ and let $\Omega\subset\RR^N$ be a bounded and regular domain. Let us
 	\end{cases}
 \end{equation}
 
-In \eqref{PE}, with $\fl{s}{}$ we indicate the Fractional Laplace operator, defined for any function $u$ regular enough as the following singular integral
+In \eqref{PE}, with $\fl{s}{}$ we indicate the fractional Laplace operator, defined for any function $u$ regular enough as the following singular integral
 \begin{align}\label{frac_lapl}
 	\fl{s}{u}(x):=\cns\,P.V.\int_{\RR^N} \frac{u(x)-u(y)}{|x-y|^{N+2s}}\,dy,
 \end{align}
@@ -157,7 +160,7 @@ In the present paper, we are interested in analyzing the behavior of the solutio
 	\item[$\bullet$] $\lim_{s\to 1^-}\fl{s}{u} = -\Delta u$.
 \end{itemize}
 
-Therefore, it is interesting to investigate whether, when $s\to 1^-$, a solution $u_s$ to \eqref{PE} converges to a solution to the classical Poisson equation 
+In view of that, it is interesting to investigate whether, when $s\to 1^-$, a solution $u_s$ to \eqref{PE} converges to a solution to the classical Poisson equation 
 \begin{align}\label{poisson}
 	\begin{cases}
 	-\Delta u = f, &x\in\Omega\tag{$\mathcal P$}
@@ -198,46 +201,13 @@ The proof of Theorem \ref{limit_thm} will be based on classical PDEs techniques.
 
 Furthermore, notice that Theorem \ref{limit_thm} requires the existence of a sequence $\mathcal{F}_s$ satisfying the assumptions $\textbf{H1}$ and $\textbf{H2}$. We point out that such sequence indeed exists, and that it is possible to construct it systematically. We will give a proof of this fact in Section \ref{prel}.
 
-Our interest in the subject of this paper is motivated by previous results concerning the numerical approximation of the Fractional Laplacian. In more detail, the issue that we aim to address comes from the observation that for the stiffness matrix $\mathcal A_h^s$ derived in \cite{biccari2017finite} from the FE discretization of \eqref{frac_lapl} in dimension $N=1$  the following holds:
-\begin{itemize}
-	\item[(i)] $\lim_{s\to 0^+}\mathcal A_h^s = h\textrm{Tridiag}(1/6,2/3,1/6):=\mathcal I_h$, an approximation of the identity;
-	
-	\item[(ii)] $\lim_{s\to 1^-}\mathcal A_h^s = h^{-1}\textrm{Tridiag}(-1,2,-1):=\mathcal A_h$, the classical tridiagonal matrix for the FE approximation of the one-dimensional Laplacian.
-\end{itemize}
-
-The second property in particular implies that also the numerical solution $u_h^s$ associated to $\mathcal A_h^s$ converges to the one corresponding to $\mathcal A_h$. Therefore, investigating whether this still holds in the continuous case is a question that arises spontaneously. 
-
-Finally, we mention that, as it most often happens, the properties of the solutions to elliptic problems can be naturally transferred into the parabolic setting. In our case, this translates in the fact that the solution $\phi_s$ to the fractional heat equation
-
-\begin{align}\label{FE}
-	\begin{cases}
-	\partial_t\phi_s + \fl{s}{\phi_s} = g_s, &(x,t)\in\Omega\times(0,T)\tag{$\mathcal H_s$}
-	\\
-	\phi_s\equiv 0, & (x,t)\in\Omega^c\times(0,T)
-	\\
-	\phi_s(x,0) = 0, & x\in\Omega,
-	\end{cases}
-\end{align}
-converges as $s\to 1^-$ to the one to the local problem 
-\begin{align}\label{HE}
-	\begin{cases}
-	\phi_t -\Delta\phi = g, &(x,t)\in\Omega\times(0,T)\tag{$\mathcal H$}
-	\\
-	\phi= 0, & (x,t)\in\partial\Omega\times(0,T)
-	\\
-	\phi(x,0) = 0, & x\in\Omega.
-	\end{cases}
-\end{align}
-
-More details on this particular issue will be given in Section \ref{parabolic_sec}.
-
-This paper will be organized as follows: Section \ref{prel} will be devoted to introduce some preliminary definitions and results that will be needed in our analysis. In Section \ref{weak_sec}, instead, we will present the proof of Theorem \ref{limit_thm}, concerning the limit behavior of the solutions in the elliptic case. Finally, in Section \ref{parabolic_sec}, we will analyze the parabolic problem.
+This paper will be organized as follows: Section \ref{prel} will be devoted to introduce some preliminary definitions and results that will be needed in our analysis. In Section \ref{weak_sec}, instead, we will present the proof of Theorem \ref{limit_thm}, concerning the limit behavior of the solutions to \eqref{PE}. Finally, in Section \ref{rem_sec}, we will present an additional result of convergence under weaker assumptions, a discussion on the rate of approximation and an extension to the the parabolic setting.
 
 \section{Preliminaries}\label{prel}
 
 In this section, we introduce some preliminary results that will be useful for the proof of our main theorem.
 
-We start by giving a more rigorous definition of the fractional Laplace operator, as we have anticipated in Section \ref{intro}. Let 
+We start by giving a more rigorous definition of the fractional Laplace operator, as we have anticipated in Section \ref{intro}. Define 
 \begin{align*}
 	\mathcal L_s^{1}(\RR^N):=\left\{u:\RR^N\to\RR\;\mbox{ measurable},\; \int_{\RR^N}\frac{|u(x)|}{(1+|x|)^{N+2s}}\;dx<\infty\right\}.
 \end{align*}
@@ -294,7 +264,7 @@ Let $\Omega\subset\RR^N$ be an arbitrary bounded open set and $0<s<1$. Then for 
 In addition, we can take $C=\sqrt{2/\cns}$. 
 \end{proposition}
 
-We remind that one of our main interest in the present work is the analysis of the behavior of the solutions of \eqref{PE} when $s\to 1^-$. The proof of Theorem \ref{limit_thm} is obtained employing classical techniques in functional analysis, as well as the following results.
+We remind that our main interest in the present work is the analysis of the behavior of the solutions of \eqref{PE} when $s\to 1^-$. The proof of Theorem \ref{limit_thm} is obtained employing classical techniques in functional analysis, as well as the following results.
 
 \begin{proposition}[{\cite[Proposition 4.4]{dihitchhiker}}]\label{limit_prop}
 For any $u\in C_0^\infty(\RR^N)$ the following statements hold:
@@ -335,7 +305,7 @@ Recall that any $f\in H^{-1}(\Omega)$ can be written as $f=\textrm{div}(g)$ with
 and set $g_\varepsilon:=g\star\rho_\varepsilon$. It is classical that:
 \begin{itemize}
 		\item[(i)] $g_\varepsilon$ is well defined, since $g\in L^2(\Omega)$, hence it is locally integrable.
-		\item[(ii)] $g_\varepsilon\in C_0^\infty(\Omega_\varepsilon)$ with $\Omega_\varepsilon:=\left\{x\in\Omega\,:\, \textrm{dist}(x,\partial\Omega)>\varepsilon\right\}.$
+		\item[(ii)] $g_\varepsilon\in C_0^\infty(\Omega_\varepsilon)$, with $\Omega_\varepsilon:=\left\{x\in\Omega\,:\, \textrm{dist}(x,\partial\Omega)>\varepsilon\right\}.$
 		\item[(iii)] $\partial_{x_i}g_\varepsilon$ is bounded uniformly with respect to $\varepsilon$ for all $i=1,\ldots,N$.
 		\item[(iv)] $\lim_{\varepsilon\to 0^+} g_\varepsilon = g$, strongly in $L^2(\Omega)$. 
 \end{itemize}
@@ -355,7 +325,7 @@ where the convergence is strong in $H^{-1}(\Omega)$. Therefore, by choosing $\va
 In this Section, we give the proof of Theorem \ref{limit_thm} employing the definition of weak solution that we gave in Section \ref{prel}. 
 
 \begin{proof}[Proof of Theorem \ref{limit_thm}]
-First of all, since we are interested in the behavior for $s\to 1^-$, from now on we will assume $s> 1/2$.  
+First of all, since we are interested in the behavior for $s\to 1^-$, until the end of the proof we will assume $s> 1/2$.  
 Moreover, from $\textbf{H2}$ and the definition of weak convergence we get 
 \begin{align}\label{limit-rhs}
 	\lim_{s\to 1^-}\int_{\Omega} f_sv\,dx = \int_{\Omega} fv\,dx, \;\;\; \forall v\in\mathcal{D}(\Omega).
@@ -380,11 +350,15 @@ Moreover, for all $N$ fixed, the constant $\mathcal{C}(s,N)$ is decreasing as a 
 \pgfplotstableread{./cns_21-09-2017_11h22.org}{\datp}
 %
 \begin{tikzpicture}%[scale=1.0]
-  \begin{axis}[xlabel=$s$, ylabel = $\mathcal{C}(s{,}N)$, ylabel style={rotate=-90}, xmin=1/2,xmax=1,xtick={0.5,1}, ytick ={0,2}]
-                 \pgfplotsinvokeforeach{1,...,9}{
-			\addplot [color=black,  thick] table [x=0, y=#1] {\datp};
-		}
-		%\node at (axis cs:0.9,1.2) [anchor=center] {{\small $N=2$}};
+  \begin{axis}[xlabel=$s$, ylabel = $\mathcal{C}(s{,}N)$, ylabel style={rotate=0}, xmin=1/2,xmax=1,xtick={0.5,1}, ytick ={0,2}, legend cell align = {left}, legend style ={draw=none}, legend pos= outer north east]
+                 
+		\addplot [color=black, densely dotted, thick] table[x=0,y=1]{\datp};\addlegendentry{\;$N=2$}
+		\addplot [color=black, densely dashed, thick] table[x=0,y=3]{\datp};\addlegendentry{\;$\phantom{N}=4$} 
+		\addplot [color=black, dashed, semithick] table[x=0,y=5]{\datp};\addlegendentry{\;$\phantom{N}=6$}
+		\addplot [color=black, dashdotted, semithick] table[x=0,y=7]{\datp};\addlegendentry{\;$\phantom{N}=8$}
+		\addplot [color=black, semithick] table[x=0,y=9]{\datp};\addlegendentry{\;$\phantom{N}=10$}
+
+	%\node at (axis cs:0.9,1.2) [anchor=center] {{\small $N=2$}};
 \end{axis}
 \end{tikzpicture}
 \caption{Behavior of $\mathcal{C}(s,N)$ as a function of $s\in\left[\frac 12,1\right]$ for different fixed values of $N$.}\label{figure}
@@ -394,7 +368,7 @@ Therefore, from \eqref{norm_est} and the uniform boundedness of $\norm{f_s}{H^{-
 \begin{align*}
 	\sqrt{1-s}\norm{u_s}{H^s(\Omega)}\leq C
 \end{align*}
-with $C$ depending only on $N$ and $\Omega$. This, thanks to Proposition \ref{brezis_prop}, allows us to conclude that $u_s\rightharpoonup u$ weakly in $H^{1-\delta}_0(\Omega)$ for any $0<\delta\leq 1$, and that $u\in H_0^1(\Omega)$.
+with $C$ depending only on $N$ and $\Omega$. This, thanks to Proposition \ref{brezis_prop}, allows us to conclude that $u_s\to u$ strongly in $H^{1-\delta}_0(\Omega)$ for any $0<\delta\leq 1$, and that $u\in H_0^1(\Omega)$.
 
 Notice that, according to \cite[Section 6]{warma2015fractional}, for all $\phi\in H_0^s(\Omega)$ and $\psi\in\mathcal{D}(\Omega)$ we have the following identity
 \begin{align*}
@@ -408,7 +382,7 @@ Moreover, since $v\in\mathcal{D}(\Omega)$ we have
 \begin{align*}
 	\big|u_s\fl{s}{v}\big| \leq C|u_s|,
 \end{align*}
-where, clearly, $u_s\in L^2(\Omega)\hookrightarrow L^1(\Omega)$, being $\Omega$ a bounded domain. Hence we can use the dominated convergence theorem and Proposition \ref{limit_prop} to conclude that
+where, clearly, $u_s\in L^2(\Omega)\hookrightarrow L^1(\Omega)$, being $\Omega$ a bounded domain. Hence we can use the Dominated Convergence Theorem and Proposition \ref{limit_prop} to conclude that
 \begin{align*}
 	\lim_{s\to 1^-} \big\langle u_s,\fl{s}{v}\big\rangle_{L^2(\Omega)} = \lim_{s\to 1^-} \int_\Omega u_s\fl{s}{v}\,dx = -\int_\Omega u\Delta v\,dx = \int_\Omega \nabla u\cdot\nabla v\,dx.
 \end{align*}
@@ -446,12 +420,180 @@ which is the unique solution to the limit problem
 \end{align*}
 
 Of course, the above fact does not tell anything about the general case of problem \eqref{PE}. To the best of our knowledge, this is an issue that, although natural and probably expected, has not yet been fully addressed in the literature (at least, not in the setting of weak solutions with minimal assumptions) and our contribution helps to fill in this gap. 
-
 \end{remark}
 
-\section{The parabolic case}\label{parabolic_sec}
+\section{Additional results an further comments}\label{rem_sec}
 
-As mentioned in Section \ref{intro}, Theorem \ref{limit_thm} has a natural extension to the parabolic case. In particular, it is possible to show that, as $s\to 1^-$, the solution $\phi_s$ to \eqref{FE} converges to the corresponding solution $\phi$ to \eqref{HE}. 
+\subsection{Weakening the assumptions of Theorem \ref{limit_thm}}
+
+Scope of this section is to show that a convergence result in the spirit of Theorem \ref{limit_thm} can be obtained under weaker assumption on the sequence $\mathcal F_s$ of the right-hand sides of \eqref{PE}. In particular, we are going to prove the following.
+
+\begin{theorem}\label{limit_thm_weak}
+Let $\mathcal F_s=\{f_s\}_{0<s<1}\subset H^{-1}(\Omega)$ be a sequence such that $f_s\rightharpoonup f$ weakly in $H^{-1}(\Omega)$. For all $f_s\in\mathcal F_s$, let $u_s$ be the corresponding solution to \eqref{PE}. Then, as $s\to 1^-$, $u_s\rightharpoonup u$ weakly in $L^2(\Omega)$, with $u$ solution to \eqref{poisson} in the transposition sense.
+\end{theorem}
+
+\begin{proof}
+First of all, since we are interesting in analyzing the behavior of $u_s$ as $s\to 1^-$, until the end of this proof we will always assume $s>1/2$. Moreover, observe that, the right-hand side $f_s$ belongs to $H^{-1}(\Omega)$, which is strictly greater than $H^{-s}(\Omega)$. Therefore, we cannot apply Lax-Milgram Theorem. Instead, we shall define the solution to \eqref{PE} in a different way.
+
+For all $\phi\in L^2(\Omega)$, let $y$ be solution of the elliptic problem 
+\begin{align}\label{PE_transp}
+	\begin{cases}
+		\fl{s}{y}=\phi, & x\in\Omega
+		\\
+		y \equiv 0, & x\in\Omega^c.
+	\end{cases}
+\end{align}
+
+Recall that, due to the regularity of $\phi$ and to the results contained in \cite{biccari2017local,cozzi2017interior}, for all $\varepsilon>0$ we have $y\in H^{2s-\varepsilon}_0(\Omega)\hookrightarrow H^1_0(\Omega)$, with continuous and compact embedding. 
+
+Moreover, the map $\Lambda: \phi\mapsto y$ is linear and continuous from $L^2(\Omega)$ into $H^{2s-\varepsilon}_0(\Omega)$. Thus, $\Lambda$ is compact from $L^2(\Omega)$ into $H^1_0(\Omega)$ and its adjoint $\Lambda^*$ is a compact operator from $H^{-1}(\Omega)$ into $L^2(\Omega)$. In addition, 
+\begin{align*}
+	\langle f_s,y\rangle_{H^{-1}(\Omega),H^1_0(\Omega)} = \langle f_s,\Lambda \phi\rangle_{H^{-1}(\Omega),H^1_0(\Omega)} = (\Lambda^* f_s,\phi)_{L^2(\Omega)}.
+\end{align*}
+
+Therefore, $u_s:=\Lambda^*f_s\in L^2(\Omega)$ is a solution defined by transposition to \eqref{PE}, i.e. it satisfies
+\begin{align}\label{transp_def_s}
+	\int_\Omega u_s\phi\,dx = \langle f_s,y\rangle_{H^{-1}(\Omega),H^1_0(\Omega)}. 
+\end{align}
+Moreover, we have 
+\begin{align}\label{us_norm}
+	\norm{u_s}{L^2(\Omega)} \leq C\norm{f_s}{H^{-1}(\Omega)}.
+\end{align}
+In particular, $\{u_s\}_{0<s<1}$ is a bounded sequence in $L^2(\Omega)$, which implies that $u_s\rightharpoonup u$ weakly in $L^2(\Omega)$.
+
+Notice that \eqref{transp_def_s} is obtained multiplying \eqref{PE} for $y$ and integrating over $\Omega$. Observe also that in this expression the functional spaces involved (namely $L^2(\Omega)$, $H_0^1(\Omega)$ and $H^{-1}(\Omega)$) do not depend on $s$. This, joint with \eqref{us_norm} and with the fact that $\phi\in L^2(\Omega)$, $f_s\in H^{-1}(\Omega)$ and $y\in H_0^1(\Omega)$, allows us to take the limit as $s\to 1^-$ in \eqref{transp_def_s}. Thanks to the Dominated Convergence Theorem, we then recover the expression
+\begin{align}\label{transp_def}
+	\int_\Omega u\phi\,dx = \langle f,y\rangle_{H^{-1}(\Omega),H^1_0(\Omega)},
+\end{align}
+i.e. $u$ is a solution by transposition to \eqref{poisson}. Moreover, since the $L^2(\Omega)$-regularity of $u_s$ cannot be improved, its convergence to a solution to \eqref{poisson} can be expected only in the weak sense.
+\end{proof}
+
+\subsection{Remarks on the convergence rate}
+
+Our interest in the subject of this paper is motivated by previous results concerning the numerical approximation of the fractional Laplacian. In more detail, the issue that we addressed came from the observation that for the stiffness matrix $\mathcal A_h^s$ derived in \cite{biccari2017controllability} from the FE discretization of \eqref{frac_lapl} in dimension $N=1$  the following holds:
+\begin{itemize}
+	\item[(i)] $\lim_{s\to 0^+}\mathcal A_h^s = h\textrm{Tridiag}(1/6,2/3,1/6):=\mathcal I_h$, an approximation of the identity;
+	
+	\item[(ii)] $\lim_{s\to 1^-}\mathcal A_h^s = h^{-1}\textrm{Tridiag}(-1,2,-1):=\mathcal A_h$, the classical tridiagonal matrix for the FE approximation of the one-dimensional Laplacian.
+\end{itemize}
+
+The second property in particular implies that also the numerical solution $u_h^s$ associated to $\mathcal A_h^s$ converges to the one corresponding to $\mathcal A_h$. Therefore, investigating whether this still holds in the continuous case was a question that arose naturally. 
+
+While we answered to this question in Theorem \ref{limit_thm}, there we did not specify under which rate this convergence occurs. In what follow, we present an informal discussion on this particular point. 
+
+During the proof of Theorem \eqref{limit_thm}, we showed that the sequence $\{u_s\}_{0<s<1}$ of solutions to \eqref{PE} is bounded in $H_0^s(\Omega)$, with the following estimate 
+\begin{align}\label{us_norm_est}
+	\sqrt{1-s}\norm{u_s}{H^s(\Omega)}\leq C,
+\end{align}
+with $C$ a constant uniform with respect to $s$. This last inequality, in turn, was obtained as a consequence of Proposition \ref{prop-ex} and of the assumption $\mathbf{H1}$ on the sequence $\{f_s\}_{0<s<1}$ of the right-hand sides. 
+
+Moreover, the factor $\sqrt{1-s}$ in \eqref{us_norm_est} already appears in \cite{bourgain2001another} to correct the well-known defect
+of the seminorm $|\cdot|_{H^s(\Omega)}$ which, as $s\to 1^-$, does not converge to $|\cdot|_{H^1(\Omega)}$. 
+
+In fact, if $\zeta$ is any smooth non-constant function, then for all $1< p<\infty$ we have $|\zeta|_{W^{s,p}(\Omega)}\to +\infty$ as $s\to 1^-$. This situation may be rectified by multiplying by $(1 -s)^{1/p}$ in front of $|\zeta|_{W^{s,p}(\Omega)}\to +\infty$. IN particular, we have 
+\begin{align*}
+	\lim_{s\to 1^-} (1-s)^{\frac 1p}|\zeta|_{W^{s,p}(\Omega)} = \left(\int_\Omega |\nabla\zeta|^p\,dx\right)^{\frac 1p}. 
+\end{align*}
+
+In view of these observations, we claim that the convergence that we obtained in Theorem \ref{limit_thm} satisfies the rate
+\begin{align*}
+	\lim_{s\to 1^-}\norm{u_s-u}{H^s(\Omega)} \sim \mathcal O(\sqrt{1-s}).
+\end{align*}
+
+Indeed, if this convergence were slower, then we would still have blow-up phenomena in the $H^s(\Omega)$-seminorm. On the other hand, if the convergence were faster, then for some $\alpha>1/2$
+\begin{align*}
+	\lim_{s\to 1^-}(1-s)^{\alpha}|\cdot|_{H^s(\Omega)} = \lim_{s\to 1^-}\underbrace{(1-s)^{\alpha-\frac 12}}_{\to 0}\underbrace{\sqrt{1-s}\,|\cdot|_{H^s(\Omega)}}_{\to |\cdot|_{H^1(\Omega)}}  = 0.
+\end{align*}
+
+Clearly, the discussion that we just presented is not a rigorous proof of our claim. Nevertheless, we believe that our statement is true, and a further confirmation is given by the following numerical simulations, where we compared the solution to \eqref{PE} and \eqref{poisson} for different values of $s$ and we computed the approximation error in the $H^s(\Omega)$-norm. As expected, we observe a convergence of $u_s$ to $u$, with a rate of $\sqrt{1-s}$.
+
+\begin{figure}[!h]
+	\pgfplotstableread{test1.org}{\datpu}
+	
+	\subfloat[Solutions to $\fl{s}{u_s}=\sin(\pi x^2)$ for different values of $s\in{[1/2,1]}$.]{
+		\begin{tikzpicture}[scale=0.75]
+		\begin{axis}[xmin=-0.98, xmax=0.98, ymax=0.7, xlabel=$x$, xtick={-0.98,0,0.98}, xticklabels={-1,0,1}, ytick=\empty, legend cell align = {left}, legend style ={draw=none}, legend pos= outer north east]
+		
+		\addplot [color=black, dotted, thick] table[x=0,y=3]{\datpu};\addlegendentry{\;$s=0.5$}
+		\addplot [color=black, densely dotted, thick] table[x=0,y=4]{\datpu};\addlegendentry{\;$s=0.6$} 
+		\addplot [color=black, densely dashed, semithick] table[x=0,y=5]{\datpu};\addlegendentry{\;$s=0.75$}
+		\addplot [color=black, dashed, semithick] table[x=0,y=6]{\datpu};\addlegendentry{\;$s=0.9$}
+		\addplot [color=black, dashdotted, semithick] table[x=0,y=7]{\datpu};\addlegendentry{\;$s=0.95$}
+		\addplot [color=black, semithick] table[x=0,y=8]{\datpu};\addlegendentry{\;$s=1$}
+		
+		\end{axis}
+		\end{tikzpicture}
+	}
+	\hspace{0.3cm}
+	\subfloat[Decay of $\norm{u_s-u}{H^s(-1,1)}$ with respect to $s\in{[1/2,1]}$.]{
+		\begin{tikzpicture}[scale=0.75]
+		\begin{loglogaxis}[xmin=0.5, xmax=0.995, ymax=0.7, xlabel=$s$, xtick={0.5,0.995}, xticklabels={0.5,1}, legend cell align = {left}, legend style ={draw=none}, legend pos= outer north east]
+		
+		\addplot [color=black, semithick] table[x=1,y=2]{\datpu};\addlegendentry{\;error}
+		\addplot [domain=0.5:1, dashed, samples=100, color=black, semithick]{0.05*sqrt(1-x)};\addlegendentry{\;$\sqrt{1-s}$}
+		
+		\end{loglogaxis}
+		\end{tikzpicture}
+	}
+	\caption{Convergence of the solutions to $\fl{s}{u_s}=\sin(\pi x^2)$ with Dirichlet homogeneous boundary conditions as $s\to 1^-$, and its corresponding error in the $H^s(-1,1)$-norm.}
+	\label{behavior1_fig}
+\end{figure}
+
+\begin{figure}[!h]
+	\pgfplotstableread{test2.org}{\datpu}
+	
+	\subfloat[Solutions to $\fl{s}{u_s}=f$ with $f$ piecewise constant for different values of $s\in{[1/2,1]}$.]{
+		\begin{tikzpicture}[scale=0.75]
+		\begin{axis}[xmin=-0.98, xmax=0.98, ymax=0.25, xlabel=$x$, xtick={-0.98,0,0.98}, xticklabels={-1,0,1}, ytick=\empty, legend cell align = {left}, legend style ={draw=none}, legend pos= outer north east]
+		
+		\addplot [color=black, dotted, thick] table[x=0,y=3]{\datpu};\addlegendentry{\;$s=0.5$}
+		\addplot [color=black, densely dotted, thick] table[x=0,y=4]{\datpu};\addlegendentry{\;$s=0.6$} 
+		\addplot [color=black, densely dashed, semithick] table[x=0,y=5]{\datpu};\addlegendentry{\;$s=0.75$}
+		\addplot [color=black, dashed, semithick] table[x=0,y=6]{\datpu};\addlegendentry{\;$s=0.9$}
+		\addplot [color=black, dashdotted, semithick] table[x=0,y=7]{\datpu};\addlegendentry{\;$s=0.95$}
+		\addplot [color=black, semithick] table[x=0,y=8]{\datpu};\addlegendentry{\;$s=1$}
+		
+		\end{axis}
+		\end{tikzpicture}
+	}
+	\hspace{0.3cm}
+	\subfloat[Decay of $\norm{u_s-u}{H^s(-1,1)}$ with respect to $s\in{[1/2,1]}$.]{
+		\begin{tikzpicture}[scale=0.75]
+		\begin{loglogaxis}[xmin=0.5, xmax=0.995, ymax=0.7, xlabel=$s$, xtick={0.5,0.995}, xticklabels={0.5,1}, legend cell align = {left}, legend style ={draw=none}, legend pos= outer north east]
+		
+		\addplot [color=black, semithick] table[x=1,y=2]{\datpu};\addlegendentry{\;error}
+		\addplot [domain=0.5:1, dashed, samples=100, color=black, semithick]{0.05*sqrt(1-x)};\addlegendentry{\;$\sqrt{1-s}$}
+		
+		\end{loglogaxis}
+		\end{tikzpicture}
+	}
+	\caption{Convergence of the solutions to $\fl{s}{u_s}=f$ with $f$ piecewise constant and Dirichlet homogeneous boundary conditions as $s\to 1^-$, and its corresponding error in the $H^s(-1,1)$-norm.}
+	\label{behavior2_fig}
+\end{figure}
+
+\subsection{The parabolic case}
+
+As it most often happens, the properties of the solutions to elliptic problems can be naturally transferred into the parabolic setting. In our case, this translates in the fact that the solution $\phi_s$ to the fractional heat equation
+
+\begin{align}\label{FE}
+	\begin{cases}
+		\partial_t\phi_s + \fl{s}{\phi_s} = g_s, &(x,t)\in\Omega\times(0,T)\tag{$\mathcal H_s$}
+		\\
+		\phi_s\equiv 0, & (x,t)\in\Omega^c\times(0,T)
+		\\
+		\phi_s(x,0) = 0, & x\in\Omega,
+	\end{cases}
+\end{align}
+converges as $s\to 1^-$ to the one to the local problem 
+\begin{align}\label{HE}
+	\begin{cases}
+		\partial_t\phi -\Delta\phi = g, &(x,t)\in\Omega\times(0,T)\tag{$\mathcal H$}
+		\\
+		\phi= 0, & (x,t)\in\partial\Omega\times(0,T)
+		\\
+		\phi(x,0) = 0, & x\in\Omega.
+	\end{cases}
+\end{align}
 
 First of all, let us recall that we have the following definition of weak solution for the parabolic problem \eqref{FE} (see, e.g., \cite{leonori2015basic}).
 \begin{definition}\label{weak_sol_def_parabolic}
@@ -476,9 +618,9 @@ Then, adapting the methodology for the proof of Theorem \eqref{limit_thm}, the f
 		
 		\item[$\textbf{K2}$] $g_s(t)\rightharpoonup g(t)$ weakly in $H^{-1}(\Omega)$ as $s\to 1^-$.
 	\end{itemize}		
-For any $f_s\in\mathcal{G}_s$, let $\phi_s\in L^2(0,T;H^s_0(\Omega))$ be the unique weak solution to the corresponding parabolic problem \eqref{FE} in the sense of Definition \ref{weak_sol_def_parabolic}. Then, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\rightharpoonup (\phi,\phi_t)$ weakly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for any $0<\delta\leq 1$. Moreover, $\phi\in L^2(0,T;H^1_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ and verifies
+For any $f_s\in\mathcal{G}_s$, let $\phi_s\in L^2(0,T;H^s_0(\Omega))$ be the unique weak solution to the corresponding parabolic problem \eqref{FE} in the sense of Definition \ref{weak_sol_def_parabolic}. Then, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\to(\phi,\partial_t\phi)$ strongly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for any $0<\delta\leq 1$. Moreover, $\phi\in L^2(0,T;H^1_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ and verifies
 \begin{align*}
-	\int_0^T \int_\Omega\phi_t\psi\,dxdt + \int_0^T\int_\Omega \nabla\phi\cdot\nabla\psi\;dxdt = \int_0^T\int_\Omega g\psi\,dxdt, \;\;\; \forall\psi\in\mathcal{D}(\Omega\times(0,T)),
+	\int_0^T \int_\Omega\partial_t\phi\psi\,dxdt + \int_0^T\int_\Omega \nabla\phi\cdot\nabla\psi\;dxdt = \int_0^T\int_\Omega g\psi\,dxdt, \;\;\; \forall\psi\in\mathcal{D}(\Omega\times(0,T)),
 \end{align*}
 i.e. it is the unique weak solution to \eqref{HE}.
 \end{theorem}
@@ -500,13 +642,13 @@ applies also to
 	\int_0^T\int_{\Omega} \partial_t\phi_s\psi\,dxdt.
 \end{equation*}
 
-In this way, we immediately conclude that, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\rightharpoonup (\phi,\phi_t)$ weakly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for all $0<\delta\leq 1$ and, in particular, that 
+In this way, we immediately conclude that, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\to (\phi,\partial_t\phi)$ strongly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for all $0<\delta\leq 1$ and, in particular, that 
 \begin{align*}
-	\lim_{s\to 1^-}\int_0^T\int_{\Omega} \partial_t\phi_s\psi\,dxdt = \int_0^T\int_{\Omega} \phi_t\psi\,dxdt.
+	\lim_{s\to 1^-}\int_0^T\int_{\Omega} \partial_t\phi_s\psi\,dxdt = \int_0^T\int_{\Omega} \partial_t\phi\psi\,dxdt.
 \end{align*}
 This, together with the above remarks, implies that the function $\phi$ satisfies
 \begin{align*}
-	\int_0^T \int_\Omega\phi_t\psi\,dxdt + \int_0^T\int_\Omega \nabla\phi\cdot\nabla\psi\;dxdt = \int_0^T\int_\Omega g\psi\,dxdt, \;\;\; \forall\psi\in\mathcal{D}(\Omega\times(0,T)),
+	\int_0^T \int_\Omega\partial_t\phi\psi\,dxdt + \int_0^T\int_\Omega \nabla\phi\cdot\nabla\psi\;dxdt = \int_0^T\int_\Omega g\psi\,dxdt, \;\;\; \forall\psi\in\mathcal{D}(\Omega\times(0,T)),
 \end{align*}
 i.e. it is the unique weak solution to \eqref{HE}.
 \end{proof}
