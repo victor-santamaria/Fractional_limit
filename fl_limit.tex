@@ -3,12 +3,12 @@
 \usepackage{amsfonts}
 \usepackage{amsmath,amssymb,amsthm,amsthm}
 \usepackage{mathtools}
-%\usepackage{dsfont}
 \usepackage{etoolbox}
 \usepackage{color}
 \usepackage[english]{babel}
 \usepackage{hyperref}
 \usepackage{microtype}
+%\usepackage{fullpage}
 
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -17,16 +17,10 @@
 \usetikzlibrary{matrix,external,fit}
 
 \hfuzz=4pt
-\usepackage[dvips,bottom=1.4in,right=1in,top=1in, left=1in]{geometry}
 
 \DisableLigatures{encoding = *, family = * }
 
 \usepackage[notref,notcite]{showkeys}
-
-\DeclareMathOperator*{\esssup}{ess\,sup}
-\DeclareMathOperator*{\essinf}{ess\,inf}
-\renewcommand{\labelenumi}{(\alph{enumi})}
-\setcounter{secnumdepth}{2} \setcounter{section}{0}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{acknowledgement}[theorem]{Acknowledgement}
@@ -42,58 +36,16 @@
 \newtheorem{remark}[theorem]{Remark}
 \numberwithin{equation}{section}
 
-\newcommand\weak{\stackrel{\mathclap{\normalfont \ast}}{\rightharpoonup}}
-
-\newcommand\ei{\stackrel{\mathclap{\normalfont \ast}}{\subset}}
-
-\newcommand\eii{\stackrel{\mathclap{\normalfont i^\star}}{\subset}}
-\newcommand{\loc}{{\rm loc}}
-
-
 \renewcommand{\proofname}{{\bf Proof}}
 
-\def\D{{\bf D}}
 \def\RR{{\mathbb{R}}}
 \def\NN{{\mathbb{N}}}
-\def\N{{\mathbb{N}}}
 \def\CC{{\mathbb{C}}}
 \def\ZZ{{\mathbb{Z}}}
-\def\K{{\mathbb{K}}}
-\def\Q{{\mathbb{Q}}}
-\def\Om{\Omega}
-\def\om{\omega}
-\def\De{\Delta}
-\def\ep{\epsilon}
-\def\var{\varepsilon}
-\def\si{\sigma}
-\def\lla{\lambda}
-\def\om{\omega}
-\def\al{\alpha}
-\def\de{\delta}
-\def\ga{\gamma}
-\def\Ga{\Gamma}
 \def\bOm{\overline{\Om}}
 \def\pOm{\partial\Omega}
 
 \newcommand{\norm}[2]{{\left\|#1\right\|}_{#2}}
-\newcommand{\hp}[1]{\hphantom{#1}}
-\newcommand{\intr}[1]{\underset{#1}{\int}}
-\newcommand{\Do}[1]{D_{#1}}
-\newcommand{\qint}{\int_{\Omega_T}}
-\newcommand{\sint}{\int_{\Sigma_T}}
-\newcommand{\omint}{\int_{\Omega}}
-\newcommand{\dt}[1]{\mathbf{DT}_{#1}}
-\newcommand{\bt}[1]{\mathbf{BT}_{#1}}
-\newcommand{\LL}{\mathbb{L}^2}
-\newcommand{\HH}[1]{\mathbb{H}^{#1}}
-\newcommand{\EE}[2]{\mathbb{E}_1(#1,#2)}
-\newcommand{\E}{\mathbb{E}_1}
-\newcommand{\ZQ}{Z_{\Omega_T}}
-\newcommand{\ZS}{Z_{\Sigma_T}}
-\newcommand{\TT}{\mathcal{T}}
-\newcommand{\sop}{\mathcal{S}}
-\newcommand{\LB}{\Delta_{\Gamma}}
-\newcommand{\GB}{\nabla_{\Gamma}}
 \newcommand{\fl}[2]{(-\Delta)^#1#2}
 \newcommand{\cns}{C_{N,s}}
 \newcommand{\rouge}[1]{{\color{red}#1}}
@@ -174,12 +126,16 @@ In our opinion, this is a very natural issue which, to the best of our knowledge
 Before introducing our main result, let us recall that we have the following definition of weak solutions. 
 
 \begin{definition}\label{weak_sol_def}
-	Let $f\in H^{-s}(\Omega)$. A function $u\in H_0^s(\Omega)$ is said to be a weak solution of the Dirichlet problem \eqref{PE} if 
+	Let $f\in H^{-s}(\Omega)$. A function $u\in H_0^s(\overline{\Omega})$ is said to be a weak solution of the Dirichlet problem \eqref{PE} if 
 	\begin{align}\label{weak-sol}
 	\frac{C_{N,s}}{2}\int_{\RR^N}\int_{\RR^N}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{N+2s}}\;dxdy = \int_\Omega  fv\,dx
 	\end{align}
 	holds for every $v\in\mathcal{D}(\Omega)$.
 \end{definition}
+
+\rouge{
+Here, $H_0^s(\overline{\Omega})$ denotes the fractional order Sobolev space which consists of all functions $u\in H^s(\Omega)$ which are zero on $\Omega^c$, while $H^{-s}(\Omega)$ is its dual. We will give a more exhaustive description of these spaces in Section \ref{prel}.
+}
 
 The main result of our work will be the following.
 
@@ -190,7 +146,7 @@ The main result of our work will be the following.
 		
 		\item[$\textbf{H2}$] $f_s\rightharpoonup f$ weakly in $H^{-1}(\Omega)$ as $s\to 1^-$.
 	\end{itemize}		
-	For all $f_s\in\mathcal{F}_s$, let $u_s\in H^s_0(\Omega)$ be the unique weak solution to the Dirichlet problem \eqref{PE}, in the sense of Definition \ref{weak_sol_def}. Then, as $s\to 1^-$, $u_s\to u$ strongly in $H^{1-\delta}_0(\Omega)$ for all $0<\delta\leq 1$. Moreover, $u\in H^1_0(\Omega)$ and verifies
+	For all $f_s\in\mathcal{F}_s$, let $u_s\in H_0^s(\overline{\Omega})$ be the unique weak solution to the Dirichlet problem \eqref{PE}, in the sense of Definition \ref{weak_sol_def}. Then, as $s\to 1^-$, $u_s\to u$ strongly in $H^{1-\delta}_0(\Omega)$ for all $0<\delta\leq 1$. Moreover, $u\in H^1_0(\Omega)$ and verifies
 \begin{align*}
 	\int_{\Omega} \nabla u\cdot\nabla v\,dx = \int_{\Omega}fv\,dx, \;\;\; \forall v\in\mathcal{D}(\Omega),
 \end{align*}
@@ -216,7 +172,7 @@ For $u\in \mathcal L_s^{1}(\RR^N)$ and $\varepsilon>0$ we set
 	(-\Delta)_\varepsilon^s u(x):= C_{N,s}\int_{\{y\in\RR^N:\;|x-y|>\varepsilon\}}\frac{u(x)-u(y)}{|x-y|^{N+2s}}\;dy,\;\;x\in\RR^N.
 \end{align*}
 
-\noindent The fractional Laplace operator $\fl{s}{}$ is then defined by the following singular integral:
+The fractional Laplace operator $\fl{s}{}$ is then defined by the following singular integral:
 \begin{align}\label{fl_def}
 	\fl{s}{u}(x)=\cns\,\mbox{P.V.}\int_{\RR^N}\frac{u(x)-u(y)}{|x-y|^{N+2s}}\;dy=\lim_{\varepsilon\downarrow 0}(-\Delta)_\varepsilon^s u(x),\;\;x\in\RR^N,
 \end{align}
@@ -239,27 +195,29 @@ where the term
 \begin{align*}
 	|u|_{H^s(\Omega)}:= \left(\int_\Omega\int_\Omega \frac{|u(x)-u(y)|^2}{|x-y|^{N+2s}}\,dxdy\right)^{\frac 12}
 \end{align*}
-is the so-called Gagliardo seminorm of $u$. We set 
+is the so-called Gagliardo seminorm of $u$. \rouge{For all $0<s<1$, we set 
 \begin{align*}
-	H_0^s(\Omega):= \overline{C_0^\infty(\Omega)}^{\,H^s(\Omega)}
+	H_0^s(\overline{\Omega}):= \left\{u\in H^s(\RR^N)\;:\;u=0\,\textrm{ in }\,\Omega^c\right\},
 \end{align*}
-the closure of the continuous infinitely differentiable functions compactly supported in $\Omega$ with respect to the $H^s(\Omega)$-norm. The following facts are well-known.
-\begin{itemize}
-	\item[$\bullet$] For $0<s\leq\frac 12$, the identity $H_0^s(\Omega) = H^s(\Omega)$ holds. This is because, in this case, the $C_0^\infty(\Omega)$ functions are dense in $H^s(\Omega)$ (see, e.g., \cite[Theorem 11.1]{jllions1972non}).
-	
-	\item[$\bullet$] For $\frac 12<s<1$, we have $H_0^s(\Omega)=\left\{ u\in H^s(\RR^N)\,:\,u=0\textrm{ in } \Omega^c\right\}$ (\cite{fiscella2015density}).
-\end{itemize}
-
-Finally, in what follows we will indicate with $H^{-s}(\Omega)=\left(H^s(\Omega)\right)'$ the dual space of $H^s(\Omega)$ with respect tot the pivot space $L^2(\Omega)$.
+and we indicate with $H^{-s}(\Omega)=\left(H^s(\overline{\Omega})\right)'$ its dual with respect tot the pivot space $L^2(\Omega)$. Moreover, if $s>1/2$, according to \cite[Theorem 6]{fiscella2015density} we have the identity
+\begin{align*}
+	H_0^s(\overline{\Omega})= H_0^s(\Omega),
+\end{align*}
+where 
+\begin{align*}
+	H_0^s(\overline{\Omega})= H_0^s(\Omega):= \overline{C_0^\infty(\Omega)}^{\,H^s(\Omega)}
+\end{align*}
+is the closure of the continuous infinitely differentiable functions compactly supported in $\Omega$ with respect to the $H^s(\Omega)$-norm.
+}
 
 A more exhaustive description of fractional Sobolev spaces and of their properties can be found in several classical references (see, e.g., \cite{adams2003sobolev,dihitchhiker,jllions1972non}).
 
 Coming back to our problem, let us recall that the existence and uniqueness of weak solutions to \eqref{PE} is guaranteed by the following result (see, e.g., \cite[Proposition 1.2.23]{peradottolaplaciano}).
 
 \begin{proposition}\label{prop-ex}
-Let $\Omega\subset\RR^N$ be an arbitrary bounded open set and $0<s<1$. Then for every $f\in H^{-s}(\Omega)$, the Dirichlet problem \eqref{PE} has a unique weak solution $u\in H_0^s(\Omega)$. Moreover, there exists a constant $C>0$ such that
+Let $\Omega\subset\RR^N$ be an arbitrary bounded open set and $0<s<1$. Then for every $f\in H^{-s}(\Omega)$, the Dirichlet problem \eqref{PE} has a unique weak solution $u\in H_0^s(\overline{\Omega})$. Moreover, there exists a constant $C>0$ such that
 \begin{align}\label{est-sol}
-	\norm{u}{H_0^s(\Omega)}\le C\norm{f}{H^{-s}(\Omega)}.
+	\norm{u}{H_0^s(\overline{\Omega})}\le C\norm{f}{H^{-s}(\Omega)}.
 \end{align}
 In addition, we can take $C=\sqrt{2/\cns}$. 
 \end{proposition}
@@ -331,7 +289,7 @@ Moreover, from $\textbf{H2}$ and the definition of weak convergence we get
 	\lim_{s\to 1^-}\int_{\Omega} f_sv\,dx = \int_{\Omega} fv\,dx, \;\;\; \forall v\in\mathcal{D}(\Omega).
 \end{align}
 
-For all $0<s<1$, let $u_s\in H_0^s(\Omega)$ be the solution to \eqref{PE} corresponding to the right-hand side $f_s$. According to Proposition \ref{prop-ex}, for $s$ sufficiently close to one we have the estimate
+For all $0<s<1$, let $u_s\in H_0^s(\overline{\Omega})$ be the solution to \eqref{PE} corresponding to the right-hand side $f_s$. According to Proposition \ref{prop-ex}, for $s$ sufficiently close to one we have the estimate
 \begin{align}\label{norm_est}
 	\sqrt{1-s}\norm{u_s}{H^s(\Omega)}\leq\mathcal{C}(s,N)\norm{f_s}{H^{-s}(\Omega)},
 \end{align}
@@ -370,19 +328,35 @@ Therefore, from \eqref{norm_est} and the uniform boundedness of $\norm{f_s}{H^{-
 \end{align*}
 with $C$ depending only on $N$ and $\Omega$. This, thanks to Proposition \ref{brezis_prop}, allows us to conclude that $u_s\to u$ strongly in $H^{1-\delta}_0(\Omega)$ for any $0<\delta\leq 1$, and that $u\in H_0^1(\Omega)$.
 
-Notice that, according to \cite[Section 6]{warma2015fractional}, for all $\phi\in H_0^s(\Omega)$ and $\psi\in\mathcal{D}(\Omega)$ we have the following identity
+Notice that, according to \cite[Section 6]{warma2015fractional}, for all $\phi\in H_0^s(\overline{\Omega})$ and $\psi\in\mathcal{D}(\Omega)$ we have the following identity
 \begin{align*}
-	\big\langle \fl{s}{\phi},\psi\big\rangle_{L^2(\Omega)} =\frac{C_{N,s}}{2}\int_{\RR^N}\int_{\RR^N}\frac{(\phi(x)-\phi(y))(\psi(x)-\psi(y))}{|x-y|^{N+2s}}\;dxdy = \big\langle \phi,\fl{s}{\psi}\big\rangle_{L^2(\Omega)}.
+	\big\langle \fl{s}{\phi},\psi\big\rangle_{L^2(\Omega)} &=\frac{C_{N,s}}{2}\int_{\RR^N}\int_{\RR^N}\frac{(\phi(x)-\phi(y))(\psi(x)-\psi(y))}{|x-y|^{N+2s}}\;dxdy 
+	\\ 
+	&= \big\langle \phi,\fl{s}{\psi}\big\rangle_{L^2(\Omega)}.
 \end{align*}
+
 This can be applied to the variational formulation \eqref{weak-sol}, which can thus be rewritten as
 \begin{align}\label{weak-def-s}
 	\big\langle u_s,\fl{s}{v}\big\rangle_{L^2(\Omega)} = \int_\Omega f_sv\,dx.
 \end{align}
-Moreover, since $v\in\mathcal{D}(\Omega)$ we have
+
+\rouge{ 
+Since $u_s\to u$ strongly in $H^{1-\delta}_0(\Omega)$ for any $0<\delta\leq 1$, by the definition of limit we have that for all $\varepsilon>0$ there exists $\sigma_1>0$ such that 
 \begin{align*}
-	\big|u_s\fl{s}{v}\big| \leq C|u_s|,
+	\norm{u_s-u}{L^2(\Omega)}\leq \frac{\varepsilon}{\sqrt{2}},
 \end{align*}
-where, clearly, $u_s\in L^2(\Omega)\hookrightarrow L^1(\Omega)$, being $\Omega$ a bounded domain. Hence we can use the Dominated Convergence Theorem and Proposition \ref{limit_prop} to conclude that
+if $|1-s|<\sigma_1$. On the other hand, since $v\in\mathcal{D}(\Omega)$, Proposition \ref{limit_prop} implies that there exists $\sigma_2>0$ such that 
+\begin{align*}
+	\norm{\fl{s}{v}- (-\Delta v)}{L^2(\Omega)}\leq \frac{\varepsilon}{\sqrt{2}},
+\end{align*}
+if $|1-s|<\sigma_2$. Then, we can conclude that, for all $\sigma\geq\max\{\sigma_1,\sigma_2\}$  
+\begin{align*}
+	\left\|\langle u_s,\fl{s}{v}\rangle_{L^2(\Omega)}\right. &-\left.\langle u,-\Delta v\rangle_{L^2(\Omega)}\right\|_{L^2(\Omega)\times L^2(\Omega)} 
+	\\
+	& = \left(\norm{u_s-u}{L^2(\Omega)}^2 + \norm{\fl{s}{v}-(-\Delta v)}{L^2(\Omega)}^2\right)^{\frac 12} \leq \frac{\varepsilon}{\sqrt{2}}
+\end{align*}
+and, consequently,
+}
 \begin{align*}
 	\lim_{s\to 1^-} \big\langle u_s,\fl{s}{v}\big\rangle_{L^2(\Omega)} = \lim_{s\to 1^-} \int_\Omega u_s\fl{s}{v}\,dx = -\int_\Omega u\Delta v\,dx = \int_\Omega \nabla u\cdot\nabla v\,dx.
 \end{align*}
@@ -455,16 +429,20 @@ Therefore, $u_s:=\Lambda^*f_s\in L^2(\Omega)$ is a solution defined by transposi
 \begin{align}\label{transp_def_s}
 	\int_\Omega u_s\phi\,dx = \langle f_s,y\rangle_{H^{-1}(\Omega),H^1_0(\Omega)}. 
 \end{align}
+\rouge{ 
 Moreover, we have 
 \begin{align}\label{us_norm}
-	\norm{u_s}{L^2(\Omega)} \leq C\norm{f_s}{H^{-1}(\Omega)}.
+	\norm{u_s}{L^2(\Omega)} \leq C\norm{f_s}{H^{-1}(\Omega)}\leq C',
 \end{align}
+with $C'$ independent of $s$ since, $f_s$ being in $H^{-1}(\Omega)$, it is uniformly bounded in that space. 
+
 In particular, $\{u_s\}_{0<s<1}$ is a bounded sequence in $L^2(\Omega)$, which implies that $u_s\rightharpoonup u$ weakly in $L^2(\Omega)$.
 
-Notice that \eqref{transp_def_s} is obtained multiplying \eqref{PE} for $y$ and integrating over $\Omega$. Observe also that in this expression the functional spaces involved (namely $L^2(\Omega)$, $H_0^1(\Omega)$ and $H^{-1}(\Omega)$) do not depend on $s$. This, joint with \eqref{us_norm} and with the fact that $\phi\in L^2(\Omega)$, $f_s\in H^{-1}(\Omega)$ and $y\in H_0^1(\Omega)$, allows us to take the limit as $s\to 1^-$ in \eqref{transp_def_s}. Thanks to the Dominated Convergence Theorem, we then recover the expression
-\begin{align}\label{transp_def}
-	\int_\Omega u\phi\,dx = \langle f,y\rangle_{H^{-1}(\Omega),H^1_0(\Omega)},
-\end{align}
+Notice that \eqref{transp_def_s} is obtained multiplying \eqref{PE} for $y$ and integrating over $\Omega$. Observe also that in this expression the functional spaces involved (namely $L^2(\Omega)$, $H_0^1(\Omega)$ and $H^{-1}(\Omega)$) do not depend on $s$. Then, using the definition of weak limit and \eqref{transp_def_s} we have 
+\begin{align*}
+	\int_\Omega u\phi\,dx = \lim_{s\to 1^-}\int_\Omega u_s\phi\,dx = \lim_{s\to 1^-} \langle f_s,y\rangle_{H^{-1}(\Omega),H_0^1(\Omega)} = \langle f,y\rangle_{H^{-1}(\Omega),H_0^1(\Omega)},
+\end{align*}
+}
 i.e. $u$ is a solution by transposition to \eqref{poisson}. Moreover, since the $L^2(\Omega)$-regularity of $u_s$ cannot be improved, its convergence to a solution to \eqref{poisson} can be expected only in the weak sense.
 \end{proof}
 
@@ -481,7 +459,7 @@ The second property in particular implies that also the numerical solution $u_h^
 
 While we answered to this question in Theorem \ref{limit_thm}, there we did not specify under which rate this convergence occurs. In what follow, we present an informal discussion on this particular point. 
 
-During the proof of Theorem \eqref{limit_thm}, we showed that the sequence $\{u_s\}_{0<s<1}$ of solutions to \eqref{PE} is bounded in $H_0^s(\Omega)$, with the following estimate 
+During the proof of Theorem \eqref{limit_thm}, we showed that the sequence $\{u_s\}_{0<s<1}$ of solutions to \eqref{PE} is bounded in $H_0^s(\overline{\Omega})$, with the following estimate 
 \begin{align}\label{us_norm_est}
 	\sqrt{1-s}\norm{u_s}{H^s(\Omega)}\leq C,
 \end{align}
@@ -490,12 +468,12 @@ with $C$ a constant uniform with respect to $s$. This last inequality, in turn, 
 Moreover, the factor $\sqrt{1-s}$ in \eqref{us_norm_est} already appears in \cite{bourgain2001another} to correct the well-known defect
 of the seminorm $|\cdot|_{H^s(\Omega)}$ which, as $s\to 1^-$, does not converge to $|\cdot|_{H^1(\Omega)}$. 
 
-In fact, if $\zeta$ is any smooth non-constant function, then for all $1< p<\infty$ we have $|\zeta|_{W^{s,p}(\Omega)}\to +\infty$ as $s\to 1^-$. This situation may be rectified by multiplying by $(1 -s)^{1/p}$ in front of $|\zeta|_{W^{s,p}(\Omega)}\to +\infty$. IN particular, we have 
-\begin{align*}
-	\lim_{s\to 1^-} (1-s)^{\frac 1p}|\zeta|_{W^{s,p}(\Omega)} = \left(\int_\Omega |\nabla\zeta|^p\,dx\right)^{\frac 1p}. 
-\end{align*}
+In fact, if $\zeta$ is any smooth non-constant function, then for all $1< p<\infty$ we have $|\zeta|_{W^{s,p}(\Omega)}\to +\infty$ as $s\to 1^-$. This situation may be rectified by multiplying by $(1 -s)^{1/p}$ in front of $|\zeta|_{W^{s,p}(\Omega)}\to +\infty$. In particular, we have 
+\begin{align}\label{conv_weighted}
+	\lim_{s\to 1^-} (1-s)^{\frac 1p}|\zeta|_{W^{s,p}(\Omega)} = \rouge{K(N,p,\Omega)}\left(\int_\Omega |\nabla\zeta|^p\,dx\right)^{\frac 1p}. 
+\end{align}
 
-In view of these observations, we claim that the convergence that we obtained in Theorem \ref{limit_thm} satisfies the rate
+\rouge{Besides, notice that the constant $K$ in the expression above is uniform in $s$.} In view of these observations, we claim that the convergence that we obtained in Theorem \ref{limit_thm} satisfies the rate
 \begin{align*}
 	\lim_{s\to 1^-}\norm{u_s-u}{H^s(\Omega)} \sim \mathcal O(\sqrt{1-s}).
 \end{align*}
@@ -597,9 +575,11 @@ converges as $s\to 1^-$ to the one to the local problem
 
 First of all, let us recall that we have the following definition of weak solution for the parabolic problem \eqref{FE} (see, e.g., \cite{leonori2015basic}).
 \begin{definition}\label{weak_sol_def_parabolic}
-Let $g_s\in L^2(0,T;H^{-s}(\Omega))$. A function $\phi_s\in L^2(0,T;H_0^s(\Omega))\cap C([0,T];L^2(\Omega))$ with $\partial_t\phi_s\in L^2(0,T;H^{-s}(\Omega))$ is said to be a weak solution to the parabolic problem \eqref{FE} if for every $\psi\in\mathcal{D}(\Omega\times(0,T))$, it holds the equality
+Let $g_s\in L^2(0,T;H^{-s}(\Omega))$. A function $\phi_s\in L^2(0,T;H_0^s(\overline{\Omega}))\cap C([0,T];L^2(\Omega))$ with $\partial_t\phi_s\in L^2(0,T;H^{-s}(\Omega))$ is said to be a weak solution to the parabolic problem \eqref{FE} if for every $\psi\in\mathcal{D}(\Omega\times(0,T))$, it holds the equality
 \begin{align}\label{weak-sol-par}
-	\int_0^T \int_\Omega\partial_t\phi_s\psi\,dxdt + \frac{C_{N,s}}{2}\int_0^T\int_{\RR^N}\int_{\RR^N}\frac{(\phi_s(x)-\phi_s(y))(\psi(x)-\psi(y))}{|x-y|^{N+2s}}\;dxdydt = \int_0^T\int_\Omega g_s\psi\,dxdt.
+	\int_0^T \int_\Omega\partial_t\phi_s\psi\,dxdt &+ \frac{C_{N,s}}{2}\int_0^T\int_{\RR^N}\int_{\RR^N}\frac{(\phi_s(x)-\phi_s(y))(\psi(x)-\psi(y))}{|x-y|^{N+2s}}\;dxdydt \notag
+	\\
+	&= \int_0^T\int_\Omega g_s\psi\,dxdt.
 \end{align}
 \end{definition}
 
@@ -618,7 +598,7 @@ Then, adapting the methodology for the proof of Theorem \eqref{limit_thm}, the f
 		
 		\item[$\textbf{K2}$] $g_s(t)\rightharpoonup g(t)$ weakly in $H^{-1}(\Omega)$ as $s\to 1^-$.
 	\end{itemize}		
-For any $f_s\in\mathcal{G}_s$, let $\phi_s\in L^2(0,T;H^s_0(\Omega))$ be the unique weak solution to the corresponding parabolic problem \eqref{FE} in the sense of Definition \ref{weak_sol_def_parabolic}. Then, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\to(\phi,\partial_t\phi)$ strongly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for any $0<\delta\leq 1$. Moreover, $\phi\in L^2(0,T;H^1_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ and verifies
+For any $f_s\in\mathcal{G}_s$, let $\phi_s\in L^2(0,T;H_0^s(\overline{\Omega}))$ be the unique weak solution to the corresponding parabolic problem \eqref{FE} in the sense of Definition \ref{weak_sol_def_parabolic}. Then, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\to(\phi,\partial_t\phi)$ strongly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for any $0<\delta\leq 1$. Moreover, $\phi\in L^2(0,T;H^1_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ and verifies
 \begin{align*}
 	\int_0^T \int_\Omega\partial_t\phi\psi\,dxdt + \int_0^T\int_\Omega \nabla\phi\cdot\nabla\psi\;dxdt = \int_0^T\int_\Omega g\psi\,dxdt, \;\;\; \forall\psi\in\mathcal{D}(\Omega\times(0,T)),
 \end{align*}
@@ -633,16 +613,13 @@ First of all, notice that a sequence $\mathcal{G}_s$ verifying $\textbf{K1}$ and
 	\item For the remaining two terms in \eqref{weak-sol-par}, the limit as $s\to 1^-$ can be addressed in an analogous way as in the proof of Theorem \ref{limit_thm}.
 \end{itemize}
 
-On the other hand, since $\partial_t\phi_s\in L^2(0,T;H^{-s}(\Omega))$, the same argument previously developed for dealing with the term 
-\begin{equation*}
-	\int_0^T\int_\Omega g_s\psi\,dxdt
-\end{equation*}
-applies also to
-\begin{equation*}
-	\int_0^T\int_{\Omega} \partial_t\phi_s\psi\,dxdt.
-\end{equation*}
+\rouge{ 
+Moreover, multiplying \eqref{FE} by $\phi_s$, integrating by parts, and using a classical methodology for heat-like equations, it is not difficult to obtain the following energy estimate:
+\begin{align*}
+	\norm{\phi_s}{L^2(0,T;H_0^s(\overline{\Omega}))} + \norm{\partial_t\phi_s}{L^2(0,T;H^{-s}(\Omega))}\leq C\norm{g_s}{L^2(0,T;H^{-s}(\Omega))}.
+\end{align*}
 
-In this way, we immediately conclude that, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\to (\phi,\partial_t\phi)$ strongly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for all $0<\delta\leq 1$ and, in particular, that 
+From here, an analogous argument as the one presented in the proof fo Theorem \ref{limit_thm} can be developed, and we conclude that}, as $s\to 1^-$, $(\phi_s,\partial_t\phi_s)\to (\phi,\partial_t\phi)$ strongly in $L^2(0,T;H^{1-\delta}_0(\Omega))\times L^2(0,T;H^{-1}(\Omega))$ for all $0<\delta\leq 1$ and, in particular, that 
 \begin{align*}
 	\lim_{s\to 1^-}\int_0^T\int_{\Omega} \partial_t\phi_s\psi\,dxdt = \int_0^T\int_{\Omega} \partial_t\phi\psi\,dxdt.
 \end{align*}
@@ -655,7 +632,7 @@ i.e. it is the unique weak solution to \eqref{HE}.
 
 \section*{Acknowledgments}
 
-The authors wish to acknowledge Enrique Zuazua (Universidad Auto\'onoma de Madrid and DeustoTech) for having suggested the topic of this work. Moreover, a special thank goes to Xavier Ros-Oton (Universit\"at Z\"urich) and Enrico Valdinoci (University of Melbourne) for interesting and clarifying discussions.
+The authors wish to acknowledge Enrique Zuazua (Universidad Auto\'onoma de Madrid, DeustoTech and Laboratoire Jacques-Louis Lions) for having suggested the topic of this work. Moreover, a special thank goes to Xavier Ros-Oton (Universit\"at Z\"urich) and Enrico Valdinoci (University of Melbourne) for interesting and clarifying discussions.
 \bibliography{biblio}
 
 \end{document}
